@@ -16,25 +16,29 @@ using namespace std;
   }
   // Para realizar el ejercicio se deben generar dos ecuaciones diferenciales de primer grado acopladas donde y1 es la primera derivada es decir la vel y y2 es la segunda que contiene los argumentos de cuando se despeja la segunda derivada
   //Se definen ecuaciones para el cuerpo 1
-  float y1(double v1){
-    return v1;
+  float y1(double vel){
+    return vel;
   }
   float y2_1(float v1, float u1, float u2,float omega, float t){
     double y2a=(-gamma*v1-2*k*u1+k*u2+Forzado(omega,t))*(1/m);
     return y2a;
   }
   //Se definene ecuaciones para el cuerpo 2
-  float y1_2(double v2){
-    return v2;
-  }
+
+  //float y1_2(double v2){
+    //return v2;
+  //}
+
   float y2_2(float v2, float u1, float u2,float u3){
     double y2b=(1/m)*(-gamma*v2+k*u1-2*k*u2+k*u3);
     return y2b;
   }
-  //Se definen ecuaciones para el cuerpo 1
-  float y1_3(double v2){
-    return v3;
-  }
+  //Se definen ecuaciones para el cuerpo 3
+
+  //float y1_3(double v3){
+    //return v3;
+  //}
+
   float y2_3(float v3,float u2,float u3){
     double y2c=(1/m)*(-gamma*v3+k*u2-k*u3);
     return y2c;
@@ -44,42 +48,45 @@ using namespace std;
   void Runge_Kutta_CuartoOrde(float &u1,float &u2,float &u3,float &v1,float &v2,float &v3, double t, double omega){
     //Se crea matriz de los k de runge kutta para las y1 de los tres cuerpos
     double matriz_1[4][3];
+
     //columna cuerpo 1
+    //k1 cuerpo 1 para y1
     matriz_1[0][0]=y1(v1);
-    matriz_1[1][0]=y1(v1)+(dt/2)*matriz_1[0][0];
-    matriz_1[2][0]=
-    matriz_1[3][0]=
+    //k2 cuerpo 1 para y1
+    matriz_1[1][0]=y1(v1+0.5*matriz_1[0][0]*dt);
+    //k3 cuerpo 1 para y1
+    matriz_1[2][0]=y1(v1+0.5*matriz[1][0]*dt);
+    //k4 cuerpo 1 para y1
+    matriz_1[3][0]=y1(v1+matriz[2][0]*dt);
     //columna cuerpo 2
-    matriz_1[0][1]=y1_2(v2);
-    matriz_1[1][1]=y1_2(v2)+(dt/2)*matriz_1[0][1];
-    matriz_1[2][1]=
-    matriz_1[3][1]=
+    matriz_1[0][1]=y1(v2);
+    matriz_1[1][1]=y1(v2+0.5*matriz_1[0][1]*dt);
+    matriz_1[2][1]=y1(v2+0.5*matriz[1][1]*dt);
+    matriz_1[3][1]=y1(v2+matriz[2][1]*dt);
     //columna cuerpo 3
-    matriz_1[0][2]=y1_3(v3);
-    matriz_1[1][2]=y1_3(v3)+(dt/2)*matriz_1[0][2];
-    matriz_1[2][2]=
-    matriz_1[3][2]=
+    matriz_1[0][2]=y1(v3);
+    matriz_1[1][2]=y1(v3+0.5*matriz_1[0][2]*dt);
+    matriz_1[2][2]=y1(v3+0.5*matriz[1][2]*dt);
+    matriz_1[3][2]=y1(v3+matriz[2][2]*dt);
 
     //Se crea matriz de los k de runge kutta para las y2 de los tres cuerpos
     double matriz_2[4][3];
 
     //columna cuerpo 1
     matriz_2[0][0]=y2_1(v1,u1,u2,omega,t);
-    matriz_2[1][0]=matriz_2[0][0]+(dt/2)*y2_1(v1,u1,u2,omega,t+(dt/2));
+    matriz_2[1][0]=
     matriz_2[2][0]=
     matriz_2[3][0]=
     //columna cuerpo 2
     matriz_2[0][1]=y2_2(v2,u1,u2,u3);
-    matriz_2[1][1]=matriz_2[0][1]+(dt/2)*matriz_2[0][1];
+    matriz_2[1][1]=
     matriz_2[2][1]=
     matriz_2[3][1]=
     //columna cuerpo 3
     matriz_2[0][2]=y2_3(v3,u2,u3);
-    matriz_2[1][2]=matriz_2[0][2]+(dt/2)*matriz_2[0][2];
+    matriz_2[1][2]=
     matriz_2[2][2]=
     matriz_2[3][2]=
-
-
   }
 int main( ){
   //Se abre el archivo donde van a ser guardados los datos
