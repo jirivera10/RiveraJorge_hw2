@@ -23,21 +23,11 @@ using namespace std;
     double y2a=(-gamm*v1-2*k*u1+k*u2+Forzado(omega,t))*(1/m);
     return y2a;
   }
-  //Se definene ecuaciones para el cuerpo 2
-
-  //double y1_2(double v2){
-    //return v2;
-  //}
 
   double y2_2(double u1, double u2, double u3,double v2){
     double y2b=(1/m)*(-gamm*v2+k*u1-2*k*u2+k*u3);
     return y2b;
   }
-  //Se definen ecuaciones para el cuerpo 3
-
-  //double y1_3(double v3){
-    //return v3;
-  //}
 
   double y2_3(double u2,double u3,double v3){
     double y2c=(1/m)*(-gamm*v3+k*u2-k*u3);
@@ -76,13 +66,13 @@ using namespace std;
   	matrizK[3][3] = y2_1(t+dt, u1+matrizK[2][0]*dt, u2+matrizK[2][1]*dt, v1+matrizK[2][3]*dt, omega );
   	matrizK[3][4] = y2_2(u1+matrizK[2][0]*dt, u2+matrizK[2][1]*dt, u3+matrizK[2][2]*dt, v2+matrizK[2][4]*dt);
   	matrizK[3][5] = y2_3(u2+matrizK[2][1]*dt, u3+matrizK[2][2]*dt, v3+matrizK[2][5]*dt);
-
-  	u1 += ( matrizK[0][0] + 2*(matrizK[1][0] + 2*matrizK[2][0]) + matrizK[3][0] )*(1/6.0);
-  	u2 += ( matrizK[0][1] + 2*(matrizK[1][1] + 2*matrizK[2][1]) + matrizK[3][1] )*(1/6.0);
-  	u3 += ( matrizK[0][2] + 2*(matrizK[1][2] + 2*matrizK[2][2]) + matrizK[3][2] )*(1/6.0);
-  	v1 += ( matrizK[0][3] + 2*(matrizK[1][3] + 2*matrizK[2][3]) + matrizK[3][3] )*(1/6.0);
-  	v2 += ( matrizK[0][4] + 2*(matrizK[1][4] + 2*matrizK[2][4]) + matrizK[3][4] )*(1/6.0);
-  	v3 += ( matrizK[0][5] + 2*(matrizK[1][5] + 2*matrizK[2][5]) + matrizK[3][5] )*(1/6.0);
+º   //Se obtiene el y+1 con runge-kutta de cuarto orden
+  	u1 += ( matrizK[0][0] + 2*(matrizK[1][0] + 2*matrizK[2][0]) + matrizK[3][0] )*(1/6.0)*dt;
+  	u2 += ( matrizK[0][1] + 2*(matrizK[1][1] + 2*matrizK[2][1]) + matrizK[3][1] )*(1/6.0)*dt;
+  	u3 += ( matrizK[0][2] + 2*(matrizK[1][2] + 2*matrizK[2][2]) + matrizK[3][2] )*(1/6.0)*dt;
+  	v1 += ( matrizK[0][3] + 2*(matrizK[1][3] + 2*matrizK[2][3]) + matrizK[3][3] )*(1/6.0)*dt;
+  	v2 += ( matrizK[0][4] + 2*(matrizK[1][4] + 2*matrizK[2][4]) + matrizK[3][4] )*(1/6.0)*dt;
+  	v3 += ( matrizK[0][5] + 2*(matrizK[1][5] + 2*matrizK[2][5]) + matrizK[3][5] )*(1/6.0)*dt;
   }
 int main( ){
   //Se abre el archivo donde van a ser guardados los datos
@@ -99,9 +89,16 @@ int main( ){
   // Se genera un ciclo que corre el tiempo un dt que llamaa runge-kutta para solucionar las ecuaciones diferenciales
   for( double t = 0.0; t < 100; t += dt ){
     matrizK_runge_kutta4( t, u1, u2, u3, v1, v2, v3, omega );
-    datos1 << t << " " << u1 << " " << u2 << endl;
+    datos1 << t << " " << u1 << " " << u2 << " " << u3 << " " << v1 << " " << v2 << " " << v3 << endl;
   }
   datos1.close();
+  //Se generan 100 distintos valores frecuencias para variar entre 0.2 y 3.0
+  ofstream datos2;
+	datos2.open("amplitud_maxima.dat");
+
+	double wmin = 0.2*sqrt(k/m);
+	double wmax = 3.0*sqrt(k/m);
+	double dw = ( wmax - wmin )/99.0;
 
   return 0;
 }
