@@ -99,6 +99,52 @@ int main( ){
 	double wmin = 0.2*sqrt(k/m);
 	double wmax = 3.0*sqrt(k/m);
 	double dw = ( wmax - wmin )/99.0;
+  for( double W = wmin; W < wmax; W += dw ){
+		u1 = 0.0;
+		u2 = 0.0;
+		u3 = 0.0;
+		v1 = 0.0;
+		v2 = 0.0;
+		v3 = 0.0;
+    //Se crea un vectores
+    vector<double> U1, U2, U3;
+    // se guardan las amplitudes con una funcion similar al append de pyhton
+		for( double t = 0.0; t < 300; t += dt ){
+			paso_runge_kutta4( t, u1, u2, u3, v1, v2, v3, W );
+			U1.push_back(u1);
+			U2.push_back(u2);
+			U3.push_back(u3);
+		}
+    // se ordenan los elementos de menor a mayor en los vectores
+		sort( U1.begin(), U1.end() );
+		sort( U2.begin(), U2.end() );
+		sort( U3.begin(), U3.end() );
+    // Una vez arreglados de menor a mayor el ultimo valor hace referencia a las frecuencias maximas, entonces se toma el ultimo valor de los vectores
+		double u1m = U1[U1.size()-1];
+		double u2m = U2[U2.size()-1];
+		double u3m = U3[U3.size()-1];
+		datos2 << W << " " << u1m << " " << u2m << " " << u3m << endl;
+  }
+  datos2.close();
+  // Bono se realiza teniendo en cuenta la friccion que se opone al movimiento
+  // Se declara un nuevo gama de 0.4, no se distingue de coeficiente de friccion estatica y dinamica por simplicidad del ejercicio
+  ofstream datos1;
+  datos3.open("friccion.dat");
 
+  double gamm = 0.4;
+  double omega = sqrt(k/m);
+  double u1 = 0.0;
+  double u2 = 0.0;
+  double u3 = 0.0;
+  double v1 = 0.0;
+  double v2 = 0.0;
+  double v3 = 0.0;
+
+  for( double t = 0.0; t < 100; t += dt ){
+    matrizK_runge_kutta4( t, u1, u2, u3, v1, v2, v3, omega );
+    datos3 << t << " " << u1 << " " << u2 << " " << u3 << " " << v1 << " " << v2 << " " << v3 << endl;
+  }
+
+  datos3.open("friccion.dat");
   return 0;
 }
