@@ -24,15 +24,35 @@ plt.legend()
 plt.figure()
 plt.subplot(3,1,1)
 plt.ylabel(r"$u_1(t)$")
-plt.plot(t,u1)
+plt.plot(t,u1,c='gold')
 
 plt.subplot(3,1,2)
 plt.ylabel(r"$u_2(t)$")
-plt.plot(t,u2)
+plt.plot(t,u2,c='darkgreen')
 
 plt.subplot(3,1,3)
 plt.xlabel(r"t")
 plt.ylabel(r"$u_3(t)$")
-plt.plot(t,u3)
+plt.plot(t,u3,c="red")
 plt.show()
 
+z = np.genfromtxt("friccion.dat")
+tBono = z[:,0]
+u1Bono= z[:,1]
+u2Bono= z[:,2]
+u3Bono= z[:,3]
+
+plt.figure()
+plt.subplot(3,1,1)
+plt.ylabel(r"$u_1(t)$")
+plt.plot(tBono,u1Bono,c='gold')
+
+plt.subplot(3,1,2)
+plt.ylabel(r"$u_2(t)$")
+plt.plot(tBono,u2Bono,c='darkgreen')
+
+plt.subplot(3,1,3)
+plt.xlabel(r"tiempo")
+plt.ylabel(r"$u_3(t)$")
+plt.plot(tBono,u3Bono,c="red")
+plt.show()

@@ -1,4 +1,5 @@
 #include <cmath>
+#include <vector>
 #include <fstream>
 #include <iostream>
 #include <algorithm>
@@ -66,7 +67,7 @@ using namespace std;
   	matrizK[3][3] = y2_1(t+dt, u1+matrizK[2][0]*dt, u2+matrizK[2][1]*dt, v1+matrizK[2][3]*dt, omega );
   	matrizK[3][4] = y2_2(u1+matrizK[2][0]*dt, u2+matrizK[2][1]*dt, u3+matrizK[2][2]*dt, v2+matrizK[2][4]*dt);
   	matrizK[3][5] = y2_3(u2+matrizK[2][1]*dt, u3+matrizK[2][2]*dt, v3+matrizK[2][5]*dt);
-º   //Se obtiene el y+1 con runge-kutta de cuarto orden
+   //Se obtiene el y+1 con runge-kutta de cuarto orden
   	u1 += ( matrizK[0][0] + 2*(matrizK[1][0] + 2*matrizK[2][0]) + matrizK[3][0] )*(1/6.0)*dt;
   	u2 += ( matrizK[0][1] + 2*(matrizK[1][1] + 2*matrizK[2][1]) + matrizK[3][1] )*(1/6.0)*dt;
   	u3 += ( matrizK[0][2] + 2*(matrizK[1][2] + 2*matrizK[2][2]) + matrizK[3][2] )*(1/6.0)*dt;
@@ -110,7 +111,7 @@ int main( ){
     vector<double> U1, U2, U3;
     // se guardan las amplitudes con una funcion similar al append de pyhton
 		for( double t = 0.0; t < 300; t += dt ){
-			paso_runge_kutta4( t, u1, u2, u3, v1, v2, v3, W );
+			matrizK_runge_kutta4( t, u1, u2, u3, v1, v2, v3, W );
 			U1.push_back(u1);
 			U2.push_back(u2);
 			U3.push_back(u3);
@@ -128,23 +129,20 @@ int main( ){
   datos2.close();
   // Bono se realiza teniendo en cuenta la friccion que se opone al movimiento
   // Se declara un nuevo gama de 0.4, no se distingue de coeficiente de friccion estatica y dinamica por simplicidad del ejercicio
-  ofstream datos1;
+  ofstream datos3;
   datos3.open("friccion.dat");
-
-  double gamm = 0.4;
-  double omega = sqrt(k/m);
-  double u1 = 0.0;
-  double u2 = 0.0;
-  double u3 = 0.0;
-  double v1 = 0.0;
-  double v2 = 0.0;
-  double v3 = 0.0;
-
+  omega = sqrt(k/m);
+  u1 = 0.0;
+  u2 = 0.0;
+  u3 = 0.0;
+  v1 = 0.0;
+  v2 = 0.0;
+  v3 = 0.0;
   for( double t = 0.0; t < 100; t += dt ){
-    matrizK_runge_kutta4( t, u1, u2, u3, v1, v2, v3, omega );
+    gamm = 1.4;
+    matrizK_runge_kutta4( t, u1, u2, u3, v1, v2, v3, omega);
     datos3 << t << " " << u1 << " " << u2 << " " << u3 << " " << v1 << " " << v2 << " " << v3 << endl;
   }
-
   datos3.open("friccion.dat");
   return 0;
 }
